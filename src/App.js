@@ -12,16 +12,19 @@ class App extends React.Component {
 
     this.state = {
       products: data.products,
-      cardItems: [],
+      cardItems: localStorage.getItem("cardItems") ? JSON.parse(localStorage.getItem("cardItems")) : [],
       size: "",
       sort: ""
     }
 
   }
 
+  createOrder = order => {
+    alert(order.name);
+  }
   removeFromCart = product => {
-    const cardItems = this.state.cardItems.slice();
     let hasChange = false;
+    let cardItems = this.state.cardItems.slice();
     cardItems.map((item) => {
       if (item._id === product._id) {
         if (item.count > 1) {
@@ -31,16 +34,18 @@ class App extends React.Component {
         }
       }
     });
-    
-    (hasChange) 
-      ? this.setState({ cardItems :  cardItems.filter(x=> x._id !== product._id)})
-      : this.setState({ cardItems });
+
+    if (hasChange) {
+      cardItems = cardItems.filter(x => x._id !== product._id);
+    }
+
+    this.setState({ cardItems });
+    localStorage.setItem("cardItems", JSON.stringify(cardItems));
   }
 
   addToCart = product => {
-    const cardItems = this.state.cardItems.slice();
-    console.log(cardItems);
     let alreadyInCart = false;
+    const cardItems = this.state.cardItems.slice();
     cardItems.forEach((item) => {
       if (item._id === product._id) {
         item.count++;
@@ -51,6 +56,7 @@ class App extends React.Component {
       cardItems.push({ ...product, count: 1 })
     }
     this.setState({ cardItems });
+    localStorage.setItem("cardItems", JSON.stringify(cardItems));
   }
 
   sortProducts = event => {
@@ -115,6 +121,7 @@ class App extends React.Component {
             </main>
             <div className="sidebar">
               <Cart
+                createOrder={this.createOrder}
                 removeFromCart={this.removeFromCart}
                 cardItems={this.state.cardItems}></Cart>
             </div>

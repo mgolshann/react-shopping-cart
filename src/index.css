@@ -195,3 +195,25 @@ footer {
 .total > button {
   flex: 1;
 }
+
+form {
+  width: 100%;
+  padding: 2rem;
+  border: 0.2rem #c0c0c0 solid;
+}
+.form-container {
+  padding: 0;
+  width: 100%;
+  list-style-type: none;
+}
+
+.form-container li {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+.form-container input {
+  padding: 0.7rem;
+  border:0.1rem #c0c0c0 solid;
+}
