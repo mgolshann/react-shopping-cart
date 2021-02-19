@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import formatCurrency from '../util';
+import Fade from 'react-reveal/Fade';
 
 export default class Cart extends Component {
 
@@ -40,22 +41,24 @@ export default class Cart extends Component {
                     {hasLength ? "Cart is Empty" : "You have " + cardItems.length + " in cart "}
                 </div>
                 <div className="card">
-                    <ul className="card-items">
-                        {cardItems.map(card => (
-                            <li key={card._id}>
-                                <div>
-                                    <img src={card.image} alt={card.title} />
-                                </div>
-                                <div>
-                                    <div>{card.title}</div>
-                                    <div className="right">
-                                        {formatCurrency(card.price)} x {card.count}{" "}
-                                        <button className="button" onClick={() => this.props.removeFromCart(card)}>Remove</button>
+                    <Fade left cascade>
+                        <ul className="card-items">
+                            {cardItems.map(card => (
+                                <li key={card._id}>
+                                    <div>
+                                        <img src={card.image} alt={card.title} />
                                     </div>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                                    <div>
+                                        <div>{card.title}</div>
+                                        <div className="right">
+                                            {formatCurrency(card.price)} x {card.count}{" "}
+                                            <button className="button" onClick={() => this.props.removeFromCart(card)}>Remove</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </Fade>
                 </div>
 
                 {hasLength && (
@@ -75,42 +78,44 @@ export default class Cart extends Component {
                         </div>
 
                         {this.state.showCheckOut && (
-                            <div className="card">
-                                <form onSubmit={this.createOrder}>
-                                    <ul className="form-container">
-                                        <li>
-                                            <span>Email {" "}</span>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                required
-                                                onChange={this.handleInput}
-                                            ></input>
-                                        </li>
-                                        <li>
-                                            <span>Name {" "}</span>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                required
-                                                onChange={this.handleInput}
-                                            ></input>
-                                        </li>
-                                        <li>
-                                            <span>Address {" "}</span>
-                                            <input
-                                                type="text"
-                                                name="address"
-                                                required
-                                                onChange={this.handleInput}
-                                            ></input>
-                                        </li>
-                                        <li>
-                                            <button type="submit" className="button primary">Check Out</button>
-                                        </li>
-                                    </ul>
-                                </form>
-                            </div>
+                            <Fade right>
+                                <div className="card">
+                                    <form onSubmit={this.createOrder}>
+                                        <ul className="form-container">
+                                            <li>
+                                                <span>Email {" "}</span>
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    required
+                                                    onChange={this.handleInput}
+                                                ></input>
+                                            </li>
+                                            <li>
+                                                <span>Name {" "}</span>
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    required
+                                                    onChange={this.handleInput}
+                                                ></input>
+                                            </li>
+                                            <li>
+                                                <span>Address {" "}</span>
+                                                <input
+                                                    type="text"
+                                                    name="address"
+                                                    required
+                                                    onChange={this.handleInput}
+                                                ></input>
+                                            </li>
+                                            <li>
+                                                <button type="submit" className="button primary">Check Out</button>
+                                            </li>
+                                        </ul>
+                                    </form>
+                                </div>
+                            </Fade>
                         )}
                     </div>
                 )}

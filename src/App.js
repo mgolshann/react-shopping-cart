@@ -5,7 +5,6 @@ import Products from './components/Products';
 import Filter from './components/Filter';
 import Cart from './components/Cart';
 
-
 class App extends React.Component {
   constructor() {
     super();
@@ -22,6 +21,7 @@ class App extends React.Component {
   createOrder = order => {
     alert(order.name);
   }
+
   removeFromCart = product => {
     let hasChange = false;
     let cardItems = this.state.cardItems.slice();
