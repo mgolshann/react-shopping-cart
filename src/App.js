@@ -3,19 +3,57 @@ import './index.css';
 import data from './data.json';
 import Products from './components/Products';
 import Filter from './components/Filter';
+import Cart from './components/Cart';
 
 
 class App extends React.Component {
   constructor() {
     super();
+
     this.state = {
       products: data.products,
+      cardItems: [],
       size: "",
       sort: ""
     }
+
   }
 
-  sortProducts = (event) => {
+  removeFromCart = product => {
+    const cardItems = this.state.cardItems.slice();
+    let hasChange = false;
+    cardItems.map((item) => {
+      if (item._id === product._id) {
+        if (item.count > 1) {
+          item.count--;
+        } else {
+          hasChange = true;
+        }
+      }
+    });
+    
+    (hasChange) 
+      ? this.setState({ cardItems :  cardItems.filter(x=> x._id !== product._id)})
+      : this.setState({ cardItems });
+  }
+
+  addToCart = product => {
+    const cardItems = this.state.cardItems.slice();
+    console.log(cardItems);
+    let alreadyInCart = false;
+    cardItems.forEach((item) => {
+      if (item._id === product._id) {
+        item.count++;
+        alreadyInCart = true;
+      }
+    });
+    if (!alreadyInCart) {
+      cardItems.push({ ...product, count: 1 })
+    }
+    this.setState({ cardItems });
+  }
+
+  sortProducts = event => {
     let sort = event.target.value;
     this.setState((state) => ({
       sort: sort,
@@ -36,20 +74,24 @@ class App extends React.Component {
         ))
     }))
   }
-  filterProducts = (event) => {
-    let value = event.target.value;
-    if (value === "") {
+
+  filterProducts = event => {
+    let size = event.target.value;
+    if (size === "") {
       this.setState({
-        size: value,
+        size: size,
         products: data.products
       })
     } else {
       this.setState({
-        size: value,
-        products: data.products.filter((product) => product.availableSizes.indexOf(value) >= 0)
+        size: size,
+        products: data.products.filter((product) => product.availableSizes.indexOf(size) >= 0)
       });
     }
   }
+
+
+
 
   render() {
     return (
@@ -67,10 +109,15 @@ class App extends React.Component {
                 sortProducts={this.sortProducts}
                 filterProducts={this.filterProducts}
               ></Filter>
-              <Products products={this.state.products}></Products>
+              <Products
+                products={this.state.products}
+                addToCart={this.addToCart}></Products>
             </main>
-
-            <div className="sidebar">Cart Items</div>
+            <div className="sidebar">
+              <Cart
+                removeFromCart={this.removeFromCart}
+                cardItems={this.state.cardItems}></Cart>
+            </div>
           </div>
         </main>
         <footer>All right is reserved .</footer>
